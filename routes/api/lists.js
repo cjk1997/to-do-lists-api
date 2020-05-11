@@ -33,6 +33,18 @@ Router.patch('/:id', async function(req, res, next) {
         res.send(data);
     } catch (err) {
         console.log(err);
-        res.status(500).send("Internal server issues, check logs.")
+        res.status(500).send("Internal server issues, check logs.");
     };
 });
+
+Router.delete('/:id', async function(req, res, next) {
+    try {
+        const data = await deleteList(req.params.id);
+        res.send(data);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Internal server issues, check logs.");
+    };
+});
+
+module.exports = Router;
