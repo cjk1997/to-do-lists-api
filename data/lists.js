@@ -31,6 +31,30 @@ const getLists = () => {
     return iou;
 };
 
+const createList = (newList) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(url, settings, async function(err, client) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log("Connected to server to POST list items.")
+                db = client.db(dbName);
+                collection = db.collection(colName);
+                collection.insertOne(newList, function(err, result) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(result.ops[0]);
+                        client.close();
+                    };
+                });
+            };
+        });
+    });
+    return iou;
+};
+
 module.exports = {
-    getLists    
+    getLists,
+    createList    
 }
