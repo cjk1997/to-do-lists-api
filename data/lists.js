@@ -54,7 +54,7 @@ const createList = (newList) => {
     return iou;
 };
 
-const addUpdateListItem = (listName, listItems) => {
+const addUpdateListItem = (id, listItems) => {
     const iou = new Promise((resolve, reject) => {
         MongoClient.connect(url, settings, async function(err, client) {
             if (err) {
@@ -63,7 +63,7 @@ const addUpdateListItem = (listName, listItems) => {
                 console.log("Connected to server to PATCH existing and new list items.")
                 db = client.db(dbName);
                 collection = db.collection(colName);
-                collection.updateOne({ list_name : listName },
+                collection.updateOne({ _id : ObjectID(id) },
                 { $set: { tasks : listItems } },
                 function(err,result) {
                     if (err) {
