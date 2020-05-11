@@ -60,7 +60,7 @@ const addUpdateListItem = (listName, listItems) => {
             if (err) {
                 reject(err);
             } else {
-                console.log("Connected to server to PATCH existing and POST new list items.")
+                console.log("Connected to server to PATCH existing and new list items.")
                 db = client.db(dbName);
                 collection = db.collection(colName);
                 collection.updateOne({ list_name : listName },
@@ -79,8 +79,32 @@ const addUpdateListItem = (listName, listItems) => {
     return iou;
 };
 
+const deleteList = (id) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(url, settings, async function(err, client) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log("Connected to server to DELETE list.");
+                db = client.db(dbName);
+                collection = db.collection(colName);
+                collection.delete({ _id : ObjectID(id)}, (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve({ deletedID: id});
+                        client.close();
+                    };
+                });
+            };
+        });
+    });
+    return iou;
+};
+
 module.exports = {
     getLists,
     createList,
-    addUpdateListItem    
+    addUpdateListItem,
+    deleteList    
 }
