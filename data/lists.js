@@ -37,7 +37,7 @@ const createList = (newList) => {
             if (err) {
                 reject(err);
             } else {
-                console.log("Connected to server to POST list items.")
+                console.log("Connected to server to POST new list.")
                 db = client.db(dbName);
                 collection = db.collection(colName);
                 collection.insertOne(newList, function(err, result) {
@@ -54,7 +54,33 @@ const createList = (newList) => {
     return iou;
 };
 
+const addUpdateListItem = (listName, listItem) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(url, settings, async function(err, client) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log("Connected to server to PATCH existing and POST new list items.")
+                db = client.db(dbName);
+                collection = db.collection(colName);
+                collection.updateOne({ list_name : listName },
+                { $set: { tasks : listItems } },
+                function(err,result) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(result);
+                        client.close();
+                    };
+                });
+            };
+        });
+    });
+    return iou;
+};
+
 module.exports = {
     getLists,
-    createList    
+    createList,
+    addUpdateListItem    
 }
