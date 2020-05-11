@@ -54,7 +54,7 @@ const createList = (newList) => {
     return iou;
 };
 
-const addUpdateListItem = (listName, listItem) => {
+const addUpdateListItem = (listName, listItems) => {
     const iou = new Promise((resolve, reject) => {
         MongoClient.connect(url, settings, async function(err, client) {
             if (err) {
